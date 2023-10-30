@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <string.h>
+#define MAX_INPUT_LENGTH 50
 
 struct Node {
   int key;
@@ -181,12 +183,33 @@ bool contains(struct Node * root, int key) {
 
 int main() {
   struct Node * root = NULL;
-  root = insert(root, 3);
-  root = insert(root, 4);
-  root = insert(root, 2);
-  root = deleteNode(root, 2);
-  if(contains(root, 3))printf("yes\n");
-  inOrder(root); printf("\n");
+  char input[MAX_INPUT_LENGTH];
+
+  while (1) {
+    fgets(input, sizeof(input), stdin);
+
+    // Remove the newline character from input
+    input[strcspn(input, "\n")] = '\0';
+
+    if (strcmp(input, "exit") == 0) {
+      break; // Exit the shell if user enters "exit"
+    } else if (strncmp(input, "insert", 6) == 0) {
+      char * num = input + 7;
+      int key = atoi(num);
+      root = insert(root, key);
+    } else if (strncmp(input, "delete", 6) == 0) {
+      char * num = input + 7;
+      int key = atoi(num);
+      root = deleteNode(root, key);
+    } else if (strncmp(input, "contains", 8) == 0) {
+      char * num = input + 9;
+      int key = atoi(num);
+      (contains(root, key))? printf("yes\n") : printf("no\n");
+    } else if (strncmp(input, "in order", 8) == 0) {
+      inOrder(root); printf("\n");
+    }
+  }
+  
   preOrder(root); printf("\n");
 
   return 0;
